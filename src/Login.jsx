@@ -1,21 +1,29 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addUser } from "./utils/userSlice";
 
-function SignInPage() {
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Signing in with:", { email, password });
     alert(`Welcome back, ${email}`);
   };
 
   const handleLogin = async () => {
     try {
-      const res = axios.post("http://localhost:3000/login", {
-        email,
-        password,
-      });
+      const res = axios.post(
+        "http://localhost:3000/login",
+        {
+          email,
+          password,
+        },
+        { withCrendentials: true }
+      );
+      dispatch(addUser(res.data));
     } catch (err) {
       console.log("ERROR" + err.message);
     }
@@ -61,6 +69,7 @@ function SignInPage() {
           <div>
             <button
               type="submit"
+              onClick={handleLogin}
               className="w-full py-3 font-semibold text-white bg-gradient-to-r from-purple-600 to-pink-500 rounded-md hover:from-purple-700 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 focus:ring-offset-gray-900 transition-all duration-300"
             >
               Sign In
@@ -82,4 +91,4 @@ function SignInPage() {
   );
 }
 
-export default SignInPage;
+export default Login;
