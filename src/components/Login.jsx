@@ -3,11 +3,10 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
-
-const BASE_URL = "http://localhost:3000"; // ✅ define BASE_URL
+import { BASE_URL } from "../utils/constants";
 
 const Login = () => {
-  const [emailId, setEmailId] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -34,13 +33,13 @@ const Login = () => {
     try {
       const res = await axios.post(
         `${BASE_URL}/signup`,
-        { firstName, lastName, emailId, password },
+        { firstName, lastName, email, password },
         { withCredentials: true }
       );
       dispatch(addUser(res.data)); // ✅ consistent
       navigate("/profile");
     } catch (err) {
-      setError(err?.response?.data?.message || "Something went wrong");
+      setError(err?.response?.data?.message || "Invalid Credentials");
     }
   };
 
@@ -86,9 +85,9 @@ const Login = () => {
               </div>
               <input
                 type="text"
-                value={emailId}
+                value={email}
                 className="input input-bordered w-full max-w-xs"
-                onChange={(e) => setEmailId(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </label>
 
